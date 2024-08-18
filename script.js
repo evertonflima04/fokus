@@ -1,3 +1,4 @@
+/* Buscando as class com o querySelector */
 const html = document.querySelector('html')
 const focoBn = document.querySelector('.app__card-button--foco')
 const curtoBn = document.querySelector('.app__card-button--curto')
@@ -11,20 +12,20 @@ const duracaoCurto = 300;
 const descansoLongo = 900;
 
 
-
-focoBn.addEventListener('click', () => {
-    html.setAttribute('data-contexto', 'foco')
-    img.setAttribute('src', '/imagens/foco.png')
-    i
+/* Colocando ações nos botões */
+focoBn.addEventListener('click', () => {   // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    alterandoContexto('foco')
 })
 
-curtoBn.addEventListener('click', () => {
-    html.setAttribute('data-contexto', 'descanso-curto')
-    img.setAttribute('src', '/imagens/descanso-curto.png')
-
+curtoBn.addEventListener('click', () => {  // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    alterandoContexto('descanso-curto')
 })
 
-descansoBn.addEventListener('click', () => {
-    html.setAttribute('data-contexto', 'descanso-longo')
-    img.setAttribute('src', '/imagens/descanso-longo.png')
+descansoBn.addEventListener('click', () => {  // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    alterandoContexto('descanso-longo')
 })
+
+function alterandoContexto(contexto) {  // Criando a função 'alterandoContexto' vai receber um parâmetro 'contexto'
+    html.setAttribute('data-contexto', contexto)  //Mudando o valor de 'data-contexto' da tag html
+    img.setAttribute('src', `/imagens/${contexto}.png`)  //Mudando o caminho de imagem da class app__imagens
+}
