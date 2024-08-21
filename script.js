@@ -7,6 +7,18 @@ const img = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
 const displayTime = document.querySelector('#timer')
 const botoes = document.querySelectorAll('.app__card-button')
+const musicaFocoInput = document.getElementById('alternar-musica')
+const musica = new Audio('/sons/luna-rise-part-one.mp3')
+musica.loop = true  // A música ficará em loop até o tempo acabar
+ 
+musicaFocoInput.addEventListener('change', () => {  // Evento change utiliza quando usamos o checkbox ou outro caso bolleano
+    if(musica.paused) {  // se a música for despausada ativa o play(), senão ativa o pause()
+        musica.play()
+    }else{
+        musica.pause()
+    }
+
+})
 
 const duracaoFoco = 1500;
 const duracaoCurto = 300;
