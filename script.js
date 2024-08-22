@@ -7,41 +7,52 @@ const img = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
 const displayTime = document.querySelector('#timer')
 const botoes = document.querySelectorAll('.app__card-button')
+const startPauseBn = document.getElementById('start-pause')
+const iniciarOuPausarBn = document.querySelector('#start-pause span')
+const IconBn = document.querySelector('.app__card-primary-butto-icon')
+
+
+const musicaPlay = new Audio('/sons/play.wav')
+const musicaPause = new Audio('/sons/pause.mp3')
+const musicaBeep = new Audio('/sons/beep.mp3')
+
 const musicaFocoInput = document.getElementById('alternar-musica')
 const musica = new Audio('/sons/luna-rise-part-one.mp3')
+
+let tempoDecorridoEmSegundos = 1500
+let intervaloId = null
+
 musica.loop = true  // A música ficará em loop até o tempo acabar
- 
 musicaFocoInput.addEventListener('change', () => {  // Evento change utiliza quando usamos o checkbox ou outro caso bolleano
     if(musica.paused) {  // se a música for despausada ativa o play(), senão ativa o pause()
         musica.play()
     }else{
         musica.pause()
     }
-
 })
-
-const duracaoFoco = 1500;
-const duracaoCurto = 300;
-const descansoLongo = 900;
-
 
 /* Colocando ações nos botões */
 focoBn.addEventListener('click', () => {   // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    tempoDecorridoEmSegundos = 1500
     alterandoContexto('foco')
     focoBn.classList.add('active')
+    
 })
 
 curtoBn.addEventListener('click', () => {  // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    tempoDecorridoEmSegundos = 300
     alterandoContexto('descanso-curto')
     curtoBn.classList.add('active')
 })
 
 descansoBn.addEventListener('click', () => {  // Com o addEventLister chamamos o evento 'click' que recebe uma arrow function (que ao clicar acontece uma função)
+    tempoDecorridoEmSegundos = 900
     alterandoContexto('descanso-longo')
     descansoBn.classList.add('active')
 })
 
 function alterandoContexto(contexto) {  // Criando a função 'alterandoContexto' vai receber um parâmetro 'contexto'
+    mostrarTempo()
     botoes.forEach(function (contexto){  
         contexto.classList.remove('active')  // Removendo a class active qaundo não for usada
     })
@@ -69,3 +80,47 @@ function alterandoContexto(contexto) {  // Criando a função 'alterandoContexto
             break;
     }
 }
+
+const contagemRegressiva = () => {
+    if(tempoDecorridoEmSegundos <=0 ) {
+        musicaBeep.play()
+        alert('Tempo finalizado')
+        zerar()
+        return
+    }
+    tempoDecorridoEmSegundos -= 1
+    mostrarTempo()
+}
+
+/*OBS: Para eu chamar uma função que está em um const, eu tenho que escrever após que ela foi escrita   */
+
+startPauseBn.addEventListener('click', () => {
+    iniciarOuPausar()
+})
+
+function iniciarOuPausar () {
+    if(intervaloId){
+        musicaPause.play()
+        zerar()
+        return
+    }
+    
+    musicaPlay.play()
+    intervaloId = setInterval(contagemRegressiva, 1000)
+    iniciarOuPausarBn.innerHTML = 'Pausar'
+    IconBn.setAttribute('src', '/imagens/pause.png')
+
+}
+function zerar() {
+    clearInterval(intervaloId) //interrompe a execusão de algum código 
+    iniciarOuPausarBn.innerHTML = 'começar'
+    IconBn.setAttribute('src', '/imagens/play_arrow.png')
+    intervaloId = null  // reniciando o valor do intervalorID para null
+}
+
+function mostrarTempo() {
+    const tempo = new Date(tempoDecorridoEmSegundos * 1000)
+    const tempoFormatado = tempo.toLocaleTimeString('pt-br', {minute: '2-digit', second: '2-digit'})
+    displayTime.innerHTML = `${tempoFormatado}`
+}
+mostrarTempo()
